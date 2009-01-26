@@ -1,13 +1,13 @@
-var getStackTrace;
-
 (function () {
+
 var mode;
 
 try {0()} catch (e) {
     mode = e.stack ? 'Firefox' : window.opera ? 'Opera' : 'Other';
 }
 
-getStackTrace = (
+YOUR_NAMESPACE.getStackTrace = (
+    // Firefox includes a stack string in thrown Errors
     mode === 'Firefox' ?
     function () {
         try {0()} catch (e) {
@@ -18,6 +18,7 @@ getStackTrace = (
         }
     } :
 
+    // Opera includes stack info in thrown Errors' .message
     mode === 'Opera' ?
     function () {
         try {0()} catch (e) {
@@ -40,7 +41,9 @@ getStackTrace = (
         }
     } :
 
-    // IE and Safari
+    // IE and Safari support fn.caller, which is limited to the function's
+    // last execution rather than tracing each execution context, and thus is
+    // unable to trace across recursive functions.
     function () {
         var curr  = arguments.callee.caller,
             FUNC  = 'function', ANON = "{anonymous}",
