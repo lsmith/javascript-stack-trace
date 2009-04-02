@@ -1,14 +1,20 @@
 (function () {
 
+/**
+ * Ientifies the available logic fork.
+ * 1 : Error().stack (FireFox)
+ * 2 : Error().message (Opera)
+ * 3 : arguments.callee.caller (IE, Safari - not a true stack trace)
+ */
 var mode;
 
 try {0()} catch (e) {
-    mode = e.stack ? 'Firefox' : window.opera ? 'Opera' : 'Other';
+    mode = e.stack ? 1 : e.message.indexOf('stacktrace') > -1 ? 2 : 3;
 }
 
 YOUR_NAMESPACE.getStackTrace = (
     // Firefox includes a stack string in thrown Errors
-    mode === 'Firefox' ?
+    mode === 1 :
     function () {
         try {0()} catch (e) {
             return e.stack.replace(/^.*?\n/,'').
@@ -19,7 +25,7 @@ YOUR_NAMESPACE.getStackTrace = (
     } :
 
     // Opera includes stack info in thrown Errors' .message
-    mode === 'Opera' ?
+    mode === 2 :
     function () {
         try {0()} catch (e) {
             var lines = e.message.split("\n"),
