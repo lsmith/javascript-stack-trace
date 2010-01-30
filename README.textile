@@ -1,3 +1,5 @@
 JavaScript function to create an array of call entries.
 
 Based on <a href="http://eriwen.com/javascript/js-stack-trace/">work by Eric Wendelin</a>.
+
+Eric has updated his work, and posted it as a <a href="http://github.com/emwendelin/javascript-stacktrace">project here on GitHub</a>.  You're likely better served by the code in that project.
